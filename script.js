@@ -1,5 +1,5 @@
 (function () {
-  const FEEDBACK_ENDPOINT = '';
+  const FEEDBACK_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzkAxUpILIplrfYXZhg8Ci_eKg-qOk24VtyPKtAfe5ji_eVTB-wBlxyycjXhBWgm80/exec';
   const feedbackLoadedAt = Date.now();
   const root = document.documentElement;
   const themeButton = document.querySelector('[data-theme-toggle]');
