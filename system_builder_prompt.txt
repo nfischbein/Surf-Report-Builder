@@ -50,18 +50,44 @@ Commercial sites may contribute ONLY two narrow categories:
 
 If unsure whether a piece of information from a commercial site is data (allowed) or interpretation (forbidden), treat it as interpretation and do not use it.
 
-RULE 2 — Use rendered web pages for buoy and station data, not raw feeds.
+RULE 2 — Use the verified URL precedence list for NDBC buoy data. Do not invent canonical URLs.
 
-When checking buoy stations, tide stations, wind stations, or any official observation source, FIRST attempt to read the browser-rendered web page that displays the data to humans. The rendered HTML is the primary source.
+NDBC's main station page (station_page.php) is JavaScript-rendered and frequently appears blank or stale to AI fetchers even when fresh data exists on a normal browser. Multiple alternate URLs serve the same underlying NDBC data in scraper-friendly formats. AI must use those alternates as the primary access path.
 
-Do NOT default to fetching .txt, .xml, .spec, or other raw feed files from these sources. Raw feeds are frequently stale, blank, decommissioned, or partial — even when the rendered page shows current valid data. Reading raw feeds first will routinely produce false "offline" or "missing" reports when the data is in fact available.
+For NDBC buoy observations, AI must read URLs in this exact priority order. Try the next only if the previous returns empty data, an error, or a timestamp older than 24 hours:
 
-Order of precedence for any station:
-1. The rendered station page (e.g. https://www.ndbc.noaa.gov/station_page.php?station=XXXXX). Read the values displayed in the human-readable HTML.
-2. Only if the rendered page itself fails to load, displays no values, or is genuinely inaccessible: fall back to official raw text or spectral files.
-3. If a fallback is used, the report must explicitly state which source was used and why the rendered page was bypassed.
+1. https://www.buoypro.com/stations/<NDBC_ID>
+   Most complete current data: waves, period, direction, wind, water temperature, pressure, gusts. Static HTML, no JavaScript. Verified working across SoCal, Hawaii, Pacific Northwest, East Coast, and Gulf as of April 2026. Third-party aggregator pulling from NDBC.
 
-Do not declare a station offline based on raw-feed inspection alone. A station is only "offline" if the rendered page itself is broken or shows no recent values.
+2. https://www.ndbc.noaa.gov/widgets/station_page.php?station=<NDBC_ID>
+   Official NOAA fallback. Fewer fields than BuoyPro (waves and water temp on most stations; wind on coastal stations) but more durable as official infrastructure. Static HTML, no JavaScript.
+
+3. https://surftruths.com/api/buoys/<NDBC_ID>/readings/current.json
+   JSON API, useful when wave data alone is sufficient. Returns swell height, swell period, swell direction, wind wave components. National coverage. Marked "under development" by the operator — treat as supplementary.
+
+The main https://www.ndbc.noaa.gov/station_page.php?station=<NDBC_ID> URL must NOT be used as the primary source. It will appear blank or stale to most AI fetchers regardless of actual buoy status. Use it only as a last resort and explicitly disclose when this is the only source that worked.
+
+Raw feed URLs (.txt, .xml, .spec) under /data/realtime2/ are unreliable through AI fetchers — sometimes fresh, sometimes returning cached old snapshots. Do not treat raw feed inspection as authoritative for "offline" judgments.
+
+Reporting requirements when reading any station:
+- the report must cite the actual URL the AI read, not the canonical URL it "should" have come from;
+- the report must include the timestamp visible on the page that was read;
+- if a fallback URL was used, the report must state why the higher-priority URL was bypassed.
+
+Multi-station sanity check — applies before declaring a network outage:
+
+If three or more independent NDBC stations all appear stale (>24 hours old) or offline in a single report run, the AI must treat this as a probable fetcher-environment problem in its own tooling, not as a real failure of the buoy network. NDBC's network does not commonly experience simultaneous multi-station outages of this kind.
+
+When this pattern occurs, the AI must:
+1. State explicitly in the closing Source Health field: "Multiple stations appeared stale through this fetcher. This may indicate a fetcher caching or rendering issue rather than actual buoy outages. Verify station status manually before trusting this report."
+2. Try at least one alternate URL pattern from the precedence list above before declaring any station offline.
+3. Lower Overall Confidence to "Speculative" until at least one station can be verified fresh through any path.
+
+This rule prevents confident "all sources offline" reports when the underlying problem is the AI's own web tools, not the buoys.
+
+Tide stations, wind stations not associated with NDBC buoys, and other source families:
+
+For NOAA Tides & Currents data (https://tidesandcurrents.noaa.gov), and for non-NDBC wind sources, the URL precedence list above does not apply. These sources have their own access patterns that have not been verified for this prompt as of April 2026. The AI should still cite the actual URL it read and the visible timestamp, and apply the freshness rules in RULE 3 below. If tide or wind data appears unavailable through normal access, disclose this in the closing Source Health field and do not extrapolate values that were not actually observed.
 
 RULE 3 — Use the freshness scale and label every cited reading.
 
