@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Surf Report Builder — build your own surf report system</title>
+    <meta
+      name="description"
+      content="A DIY system for surfers. Build a break-specific AI reporting setup, run detailed Session Reports and Long Range Reports, and keep your own forecast record."
+    />
+    <meta property="og:title" content="AI Surf Report Builder" />
+    <meta
+      property="og:description"
+      content="Create a reusable AI surf report setup for your break, session window, and standards."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0b4f71" />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&f[]=satoshi@400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" data-header>
+      <nav class="nav container" aria-label="Primary navigation">
+        <a href="#top" class="brand" aria-label="AI Surf Report Builder home">
+          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <path d="M7 30c7-11 15-16 25-16 4 0 7 1 10 3-4 1-7 3-9 6-3 4-7 7-13 7H7Z" />
+            <path d="M7 30c7 0 11 5 17 5 7 0 10-5 17-5" />
+            <path d="M24 10v-4M14 14l-3-3M34 14l3-3" />
+          </svg>
+          <span>AI Surf Report Builder</span>
+        </a>
+        <div class="nav-links">
+          <a href="#downloads">Downloads</a>
+          <a href="#feedback">Feedback</a>
+          <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch theme">
+            <span aria-hidden="true">◐</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero section" id="top">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">DIY surf forecasting</p>
+            <h1>Build your own surf reports.</h1>
+            <p class="hero-lede">
+              Create a personalized reporting setup for your favorite break or breaks. Start
+              with one reusable setup prompt and paste it into your AI, then run your own Session Reports and Long Range
+              Reports whenever you want. Add optional scoring and Google Sheets history later
+              if you want the system to learn from your real sessions.
+            </p>
+            <p class="no-code-note">No coding required. If you can copy, paste, and answer a few quick questions, you can use it.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#prompt">Get the Prompt</a>
+              <a class="button button-secondary" href="#downloads">Download the Full System Guide</a>
+            </div>
+            <p class="small-note">This site does not generate forecasts. It gives you the System Guide and setup text to run in your own AI workspace.</p>
+          </div>
+
+          <aside class="report-card system-preview" aria-label="Short explanation of the AI Surf Report Builder system">
+            <div class="report-card-header">
+              <span class="status-dot"></span>
+              <span>System preview</span>
+            </div>
+            <h2>Start fast. Add the full system when you want it.</h2>
+            <p>
+              Use the quick setup for Session Reports, or add Long Range Reports, optional
+              validation logging, and Google Sheets storage later.
+            </p>
+            <div class="system-stack" aria-label="Prompt system snapshot">
+              <article>
+                <span>01</span>
+                <strong>Near Term Report</strong>
+                <p>For your next session.</p>
+              </article>
+              <article>
+                <span>02</span>
+                <strong>Long Range Report</strong>
+                <p>For upcoming swell events.</p>
+              </article>
+              <article>
+                <span>03</span>
+                <strong>Optional Self-Refinement</strong>
+                <p>Reporting, scoring, and historical comparison.</p>
+              </article>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section section-offset" id="downloads" aria-label="Downloads and prompt kit">
+        <div class="container downloads-shell">
+          <div class="section-heading compact">
+            <p class="eyebrow">Downloads</p>
+            <h2>Get the prompt, or download the System Guide.</h2>
+            <p>
+              Copy the setup prompt to start fast, or download the full System Guide for the
+              complete system.
+            </p>
+          </div>
+
+          <div class="download-grid">
+            <article class="download-card featured">
+              <span class="status-pill">PDF</span>
+              <h3>Full System Guide</h3>
+              <p>
+                The complete system: next-session reports, long-range reports, validation
+                logging, Google Sheets archive, and implementation notes in one downloadable file.
+              </p>
+              <a class="button button-primary" href="./ai_surf_report_builder_system_guide_v0_1.pdf" download>
+                Download the Full System Guide
+              </a>
+            </article>
+
+            <article class="download-card">
+              <span class="status-pill">Available now</span>
+              <h3>System Builder Prompt</h3>
+              <p>
+                Paste this setup text into your AI to generate a custom Session Report setup or
+                the full system for your own break.
+              </p>
+              <button class="button button-primary" type="button" data-copy-target="systemPrompt">
+                Copy System Builder Prompt
+              </button>
+            </article>
+          </div>
+
+          <div class="prompt-panel" id="prompt" aria-label="System Builder Prompt copy window">
+            <div class="prompt-panel-header">
+              <div>
+                <p class="eyebrow">Copy window</p>
+                <h3>Full System Builder Prompt</h3>
+              </div>
+              <button class="button button-copy" type="button" data-copy-target="systemPrompt">
+                Copy Prompt
+              </button>
+            </div>
+            <pre class="prompt-window" id="systemPrompt" data-prompt-src="./system_builder_prompt.txt"><code>Loading System Builder Prompt…</code></pre>
+            <p class="prompt-note">
+              Copy from this page when possible. Copying from the PDF can introduce line-break or formatting errors.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="feedback">
+        <div class="container feedback-card">
+          <div class="section-heading compact">
+            <p class="eyebrow">Feedback</p>
+            <h2>What did we miss?</h2>
+            <p>
+              Local surfers will spot missing buoys, bad swell windows, weird tide assumptions,
+              and AI mistakes faster than anyone else.
+            </p>
+          </div>
+          <div class="feedback-options">
+            <span class="status-pill muted">Feedback link next</span>
+            <p>Before sharing broadly, add one simple feedback path: Google Form, project email, GitHub issues, or a Reddit thread.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <p>AI Surf Report Builder is an experimental DIY surf-report system. Always check real conditions before entering the ocean.</p>
+        <a href="#top">Back to top</a>
+      </div>
+    </footer>
+
+    <div class="toast" role="status" aria-live="polite" data-toast>Copied</div>
+    <script src="./script.js" defer></script>
+  </body>
+</html>
