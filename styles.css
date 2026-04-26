@@ -534,9 +534,9 @@ li {
 }
 
 .download-card {
-  display: grid;
-  align-content: start;
-  justify-items: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--space-4);
   min-height: 18rem;
   padding: clamp(var(--space-5), 4vw, var(--space-8));
@@ -544,6 +544,12 @@ li {
   border-radius: var(--radius-2xl);
   background: color-mix(in srgb, var(--color-surface) 82%, transparent);
   box-shadow: var(--shadow-sm);
+}
+
+.download-card > .button,
+.download-card > a.button,
+.download-card > button.button {
+  margin-top: auto;
 }
 
 .download-card.featured {

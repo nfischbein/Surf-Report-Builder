@@ -68,7 +68,7 @@
               <span class="status-dot"></span>
               <span>System preview</span>
             </div>
-            <h2>Start fast. Add the full system when you want it.</h2>
+            <h2>1 Builder. 3 Outputs.</h2>
             <p>
               Use the quick setup for Session Reports, or add Long Range Reports, an optional
               validation layer, and Google Sheets storage later.
@@ -106,7 +106,19 @@
           </div>
 
           <div class="download-grid">
-            <article class="download-card featured">
+            <article class="download-card">
+              <span class="status-pill">Prompt Only</span>
+              <h3>System Builder Prompt</h3>
+              <p>
+                Paste this setup text into your AI to generate a custom Session Report setup or
+                the full system for your own break.
+              </p>
+              <button class="button button-primary" type="button" data-copy-target="systemPrompt">
+                Copy System Builder Prompt
+              </button>
+            </article>
+
+            <article class="download-card">
               <span class="status-pill">PDF</span>
               <h3>Full System Guide</h3>
               <p>
@@ -116,18 +128,6 @@
               <a class="button button-primary" href="./ai_surf_report_builder_system_guide_v0_3.pdf" download>
                 Download the Full System Guide
               </a>
-            </article>
-
-            <article class="download-card">
-              <span class="status-pill">Available now</span>
-              <h3>System Builder Prompt</h3>
-              <p>
-                Paste this setup text into your AI to generate a custom Session Report setup or
-                the full system for your own break.
-              </p>
-              <button class="button button-primary" type="button" data-copy-target="systemPrompt">
-                Copy System Builder Prompt
-              </button>
             </article>
           </div>
 
@@ -174,9 +174,7 @@
               <input type="email" name="reply_to" placeholder="Optional" />
             </label>
             <button class="button button-primary" type="submit">Send feedback</button>
-            <p class="feedback-note" data-feedback-status>
-              Feedback is sent through a private relay. The recipient email is not exposed on this page.
-            </p>
+            <p class="feedback-note" data-feedback-status></p>
             <p class="feedback-note setup-warning" data-feedback-setup>
               Feedback relay not connected yet. Add your deployed Apps Script Web App URL in <code>script.js</code>.
             </p>
