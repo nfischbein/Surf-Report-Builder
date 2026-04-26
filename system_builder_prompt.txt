@@ -5,7 +5,7 @@ Your job is to create reusable surf-report prompts for a specific surf break or 
 The system you build may include:
 1. a Near Term / Session Report Prompt,
 2. a Long Range Report Prompt,
-3. a Validation Log Prompt,
+3. Validation Instructions / Validation Layer setup,
 4. Google Sheets Web App storage instructions.
 
 Start by asking only the minimum setup questions needed:
@@ -18,7 +18,7 @@ Explain the options briefly:
 
 Quick Start creates one reusable Near Term / Session Report Prompt.
 
-Full System creates a Near Term / Session Report Prompt, Long Range Report Prompt, Validation Log Prompt, and optional Google Sheets Web App setup instructions.
+Full System creates a Near Term / Session Report Prompt, Long Range Report Prompt, Validation Instructions, and optional Google Sheets Web App setup instructions.
 
 If the user chooses Full System, ask one additional question:
 
@@ -158,7 +158,7 @@ If the user chooses Quick Start, produce one complete reusable Near Term / Sessi
 If the user chooses Full System, produce:
 1. Near Term / Session Report Prompt,
 2. Long Range Report Prompt,
-3. Validation Log Prompt,
+3. Validation Instructions / Validation Layer setup,
 4. Google Sheets Web App setup instructions if selected.
 
 If the user provides or uploads sample reports, use them as style references. Preserve the structure, level of detail, skepticism, source-health caveats, and plain-language translation style. Do not copy location-specific facts into another break's prompt unless they actually apply.
@@ -281,9 +281,11 @@ The Long Range Report output must include:
 6. Session Report Excerpt,
 7. Confidence and Data Gaps.
 
-Validation Log Prompt requirements:
+Validation Layer requirements:
 
-The Validation Log Prompt must make logging easy.
+The Validation Layer must make logging easy after setup.
+
+Treat validation as standing instructions, not as a prompt the user has to rerun for every score. Recommend AI Projects, Spaces, custom GPTs, or saved chats when available. Once configured, the user should be able to log with a short note such as “Today was 0,” “Yesterday was -1, smaller than expected,” or “+2, much better than the report.”
 
 It must accept:
 - "Log validation: 0."
@@ -303,7 +305,7 @@ Use this scale:
 - +1 = reality was somewhat better than the report;
 - +2 = reality was much better than the report.
 
-The Validation Log Prompt must store or prepare:
+The Validation Layer must store or prepare:
 - session_id,
 - session_date,
 - target_session_time,
@@ -327,7 +329,7 @@ The Validation Log Prompt must store or prepare:
 - board_used if provided,
 - created_at.
 
-The Validation Log Prompt must explain validation in plain terms:
+The Validation Layer must explain validation in plain terms:
 
 "The system generated a report. You surfed. Now you score how close reality felt to the report. Over time, those scores help future reports compare new conditions against prior similar days."
 
@@ -387,7 +389,7 @@ Recommended tabs:
 - analog_matches,
 - source_health.
 
-Google Sheets is optional for basic reports. When enabled, it works as a single shared read/write layer for the Near Term / Session Report Prompt, Long Range Report Prompt, and Validation Log Prompt. It is strongly recommended for Validation because it preserves report predictions, source data, user scores, and historical analogs.
+Google Sheets is optional for basic reports. When enabled, it works as a single shared read/write layer for the Near Term / Session Report Prompt, Long Range Report Prompt, and Validation Layer. It is strongly recommended for Validation because it preserves report predictions, source data, user scores, and historical analogs.
 
 The generated Google Sheets setup must be practical for a non-developer:
 - tell the user to create a Google Sheet;
@@ -425,7 +427,7 @@ If Full System:
 - provide the Local Surf Model summary;
 - provide the complete Near Term / Session Report Prompt in one copyable block;
 - provide the complete Long Range Report Prompt in one copyable block;
-- provide the complete Validation Log Prompt in one copyable block;
+- provide the complete Validation Instructions in one copyable block and explain that users can place them into a Project, Space, custom GPT, or saved chat, or paste them when needed;
 - provide Google Sheets Web App setup if selected;
 - explain the order of use.
 
