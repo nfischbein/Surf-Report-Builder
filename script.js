@@ -47,6 +47,7 @@
           const code = element.querySelector('code') || element;
           code.textContent = text.trim();
         } catch (error) {
+          console.warn('Prompt load failed:', error);
           const code = element.querySelector('code') || element;
           code.textContent = 'Prompt could not load. Download the System Guide or refresh the page.';
         }
@@ -120,7 +121,7 @@
   });
 
   if (feedbackForm) {
-    if (!FEEDBACK_ENDPOINT) {
+    if (!FEEDBACK_ENDPOINT || FEEDBACK_ENDPOINT === 'YOUR_APPS_SCRIPT_URL_HERE') {
       feedbackSetup?.classList.add('show');
     }
 
@@ -181,6 +182,7 @@
         feedbackStatus.textContent = 'Feedback sent. Thanks.';
         showToast('Feedback sent');
       } catch (error) {
+        console.warn('Feedback submit failed:', error);
         feedbackStatus.textContent = 'Feedback could not be sent. Try again later.';
         showToast('Feedback failed');
       } finally {
