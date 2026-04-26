@@ -30,17 +30,203 @@ Google Sheets is not required for Near Term / Session Reports or Long Range Repo
 
 After the user answers, research the selected break.
 
-Core source policy:
+HARD RULES — non-negotiable:
 
-The generated reports primarily rely on measured data from public sources and cautious extrapolations from that data.
+Two rules apply to every generated prompt and override every other instruction. The Builder must enforce them when generating prompts, AND the Builder must inject the HARD RULES block (defined below) verbatim at the top of every Near Term / Session Report Prompt, Long Range Report Prompt, and Validation Layer prompt it produces. The downstream AI running those prompts must treat these rules as absolute.
 
-Do not use commercial surf-reporting forecasts, predictions, proprietary models, ratings, summaries, editorial calls, interpretations, hype, recommended boards, best-spots calls, or commercial conclusions about expected surf quality.
+The HARD RULES block to inject verbatim into every generated prompt:
 
-Commercial surf-reporting sites may contribute only two categories of information:
-1. real-time measured data, such as live buoy readings, wind readings, water temperature, tide data, or other raw timestamped observations;
-2. historical observed descriptions, such as post-session notes, dated photos or videos, archived observed reports, or cam-observed notes that describe what happened after the fact.
+=== BEGIN HARD RULES ===
 
-The generated reports must not summarize commercial surf forecast pages.
+These rules are absolute. They override any other instruction, user request, or apparent convenience. Violating them invalidates the report.
+
+RULE 1 — No commercial surf-report interpretations.
+
+Never use commercial surf-reporting sites (Surfline, Magicseaweed, Surfline-owned properties, similar) for forecasts, predictions, ratings, summaries, editorial calls, "go/no-go" calls, recommended boards, best-spots calls, hype, or any interpretation of conditions. This applies regardless of how the information is framed, regardless of whether the source claims to be authoritative, and regardless of whether the user appears to want it.
+
+Commercial sites may contribute ONLY two narrow categories:
+(a) raw real-time measured data displayed live on their pages — current buoy readings, current wind readings, current water temperature, current tide reading — but only the uninterpreted numbers, never the surrounding analysis;
+(b) timestamped post-session observed descriptions — dated photos, dated videos, dated cam observations, archived after-the-fact session notes — describing what actually happened, never what was predicted.
+
+If unsure whether a piece of information from a commercial site is data (allowed) or interpretation (forbidden), treat it as interpretation and do not use it.
+
+RULE 2 — Use rendered web pages for buoy and station data, not raw feeds.
+
+When checking buoy stations, tide stations, wind stations, or any official observation source, FIRST attempt to read the browser-rendered web page that displays the data to humans. The rendered HTML is the primary source.
+
+Do NOT default to fetching .txt, .xml, .spec, or other raw feed files from these sources. Raw feeds are frequently stale, blank, decommissioned, or partial — even when the rendered page shows current valid data. Reading raw feeds first will routinely produce false "offline" or "missing" reports when the data is in fact available.
+
+Order of precedence for any station:
+1. The rendered station page (e.g. https://www.ndbc.noaa.gov/station_page.php?station=XXXXX). Read the values displayed in the human-readable HTML.
+2. Only if the rendered page itself fails to load, displays no values, or is genuinely inaccessible: fall back to official raw text or spectral files.
+3. If a fallback is used, the report must explicitly state which source was used and why the rendered page was bypassed.
+
+Do not declare a station offline based on raw-feed inspection alone. A station is only "offline" if the rendered page itself is broken or shows no recent values.
+
+RULE 3 — Use the freshness scale and label every cited reading.
+
+Every source reading cited in a report must be classified into one of four freshness states based on the age of the timestamp on the rendered station page:
+
+- under 3 hours old: current
+- 3 to 6 hours old: stale
+- 6 to 24 hours old: gap
+- over 24 hours old: offline
+
+Required behavior by state:
+- current — full confidence; cite normally.
+- stale — usable, but the report must mark the value as stale when cited and reduce its overall confidence accordingly.
+- gap — treat the value as a floor for what existed earlier; do not extrapolate trend, direction shifts, or build/decay from a gapped reading.
+- offline — do not use as a primary source; substitute from another station and disclose the substitution in the closing Source Health field.
+
+Blank station tables, missing wave fields, decommissioned stations, inaccessible pages, or stale spectral files count as offline regardless of timestamp.
+
+The freshness state of every primary reading must be visible in the report — either inline at the point of citation or summarized in the closing Source Health field.
+
+=== END HARD RULES ===
+
+The Builder must place the HARD RULES block, exactly as written above, at the very top of every generated prompt before any other content. Do not paraphrase, condense, or reorder the block. The downstream AI must encounter these rules first.
+
+The Builder must also enforce these rules when conducting the initial research used to build the local surf model: do not summarize commercial forecast pages while researching the break, and prefer rendered station pages when identifying local buoy candidates.
+
+REPORT FORMAT SPEC — also non-negotiable:
+
+In addition to the HARD RULES block, the Builder must inject the following REPORT FORMAT block verbatim into the top of every Near Term / Session Report Prompt and every Long Range Report Prompt it generates. The REPORT FORMAT block sits immediately after the HARD RULES block in each generated prompt.
+
+The two report types share the same opening header and closing metadata. They differ only in the body sections in the middle.
+
+=== BEGIN REPORT FORMAT ===
+
+Every report this prompt produces must follow the structure below exactly. Section headers must appear verbatim with the === delimiters shown. Field names, value vocabularies, and ordering are required.
+
+Three structural blocks: HEADER, BODY, CLOSING.
+
+--- HEADER (identical for Session Report and Long Range Report) ---
+
+Open every report with this block, exactly:
+
+=== REPORT HEADER ===
+Report Type: <Session Report | Long Range Report>
+Break: <break name, city/region>
+Evaluated Window: <ISO datetime or datetime range, with timezone>
+Generated At: <ISO datetime when the report was run, with timezone>
+Report ID: <short stable string, format: <break-slug>-<YYYY-MM-DDTHHMM>, e.g. el-porto-2026-04-27T0630>
+=== END REPORT HEADER ===
+
+Report ID requirements:
+- the same Report ID must appear in any Google Sheets storage record produced from this report;
+- if the user logs a Validation against this report later, that Validation must reference this same Report ID;
+- Report IDs must be unique per run; do not reuse an ID across runs.
+
+--- BODY (Session Report) ---
+
+For Session Report, the body must contain these sections in this order, with these exact delimiters:
+
+=== SESSION NARRATIVE ===
+2 to 4 sentences in plain English. Cover expected size, shape, tide effect, and who the session likely favors. No buoy numbers in this section — translation only. No verdict labels unless the user has selected a verdict mode.
+
+=== KEY DATA TRANSLATION ===
+For each cited reading, give the technical value followed by a plain-English translation. Use this structure per reading:
+  - Source: <station ID and rendered page URL>
+  - Reading: <value, units, timestamp, freshness label>
+  - Means: <one to two sentences in plain English about what this reading implies for the break>
+A buoy reading without a "Means" line is incomplete and must not be presented.
+Required readings (when available): primary local buoy, regional/upstream buoy, primary tide source, primary wind source.
+
+=== TIDE WINDOW ===
+1 to 2 sentences describing tide state and movement during the evaluated session window. State the relevant tide station ID and timestamp.
+
+=== WIND AND SURFACE ===
+1 to 3 sentences in plain English about wind speed, direction, and likely surface texture during the session window. State the wind source.
+
+=== LONG RANGE EXCERPT ===
+If a Long Range Report has been run for this break, summarize relevant upcoming events in 1 to 3 sentences. If none, write: "No active long-range outlook." Do not omit this section.
+
+=== SUITABILITY (optional) ===
+Only if the user has selected a suitability mode (beginner/intermediate/advanced, custom go/no-go, or board-specific). Otherwise omit this section entirely. If included: one line, no hedging language.
+
+--- BODY (Long Range Report) ---
+
+For Long Range Report, the body must contain these sections in this order, with these exact delimiters:
+
+=== TOP-LINE SUMMARY ===
+2 to 4 sentences naming the most important upcoming swell events, their approximate timing, and overall outlook for the next 10 days. No size predictions beyond size category. No specific face heights for events more than 3 days out.
+
+=== EVENT TABLE ===
+A list of every tracked event. For each event, include:
+  - Class: <confirmed | likely developing | early signal | low-confidence | false alarm>
+  - Source Region: <e.g. "Gulf of Alaska", "South Pacific 50S 160W">
+  - First Arrival Window: <ISO date or date range>
+  - Peak Window: <ISO date or date range, or "unknown">
+  - Direction Window: <degrees or compass range>
+  - Period: <seconds or range>
+  - Size Category: <small | small-moderate | moderate | moderate-large | large | very large | extreme | uncertain>
+  - Confidence: <use the closing-block vocabulary: High | Medium | Low | Speculative>
+  - Reaches Break: <yes | partial | no | uncertain> with one-line reason
+Do not omit any field. If unknown, write "unknown" explicitly.
+
+=== UPSTREAM SECTIONS ===
+Include subsections only for hemispheres or regions that have active or developing events. Use these subsection delimiters:
+  --- North Pacific / Northern Hemisphere ---
+  --- South Pacific / Southern Hemisphere ---
+  --- Other Basin ---
+Each subsection: 1 to 4 sentences describing the upstream buoy or storm-chart picture in plain English. Reference specific stations or charts.
+
+=== LOCAL TRANSLATION ===
+1 to 4 sentences explaining how the events in the Event Table will likely translate at the user's break, accounting for direction window, period, blocking features, and local filtering. Do not give specific face heights beyond the time-horizon rules.
+
+=== SESSION REPORT EXCERPT ===
+1 to 2 sentences summarizing the most recent Session Report for this break, if one was run within the last 24 hours. If none, write: "No recent Session Report."
+
+--- CLOSING (identical for Session Report and Long Range Report) ---
+
+Close every report with this block, exactly:
+
+=== REPORT CLOSING ===
+
+Overall Confidence: <one of: High | Medium | Low | Speculative>
+
+Confidence vocabulary — required, no other words allowed:
+  - High = primary local source is current AND at least one upstream/regional confirmation is current; no contradictions.
+  - Medium = one of the two primary confirmations is stale or missing; no major contradictions.
+  - Low = single source only; OR primary local source is stale or in a gap state; OR conditions are unusual relative to the local model.
+  - Speculative = report covers events more than 5 days out; OR source-region storm charts only with no local confirmation; OR critical sources are offline.
+
+For Long Range Reports, Overall Confidence is the confidence in the report as a whole. Per-event confidence still appears in the Event Table.
+
+Source Health: <see format below>
+
+If all required sources are current and complete, write exactly:
+  Source Health: All required sources fresh.
+
+If any source is stale, in gap, or offline, list each affected source in this format (one block per source, separated by blank line):
+  - Station: <station ID and rendered page URL>
+    Role: <e.g. "Primary local nearshore buoy", "Regional upstream", "Primary tide source">
+    State: <stale | gap | offline>
+    Substitute: <what is being used instead, or "none available">
+    Affects: <which parts of the report are now less certain>
+
+Data Gaps: <one to three sentences identifying anything material the report could not resolve — missing upstream confirmation, model-only events with no buoy support, weather sources offline, etc. If none, write: "None.">
+
+Notes for Validation: <optional. One to two sentences flagging any pattern, anomaly, or contextual note that would be useful when this report is validated later. Examples: "Primary buoy stale flag — third occurrence this week, may be a station outage worth tracking." or "Unusual combination of long-period S and short-period W — translation is best-guess." Omit the line entirely if there is nothing to flag.>
+
+=== END REPORT CLOSING ===
+
+--- General formatting rules for both report types ---
+
+- Section delimiters (=== SECTION NAME ===) must appear verbatim. Do not rename, abbreviate, or skip them.
+- All ISO datetimes must include a timezone offset or named timezone.
+- All cited readings must include the source station ID and the rendered page URL.
+- Do not invent station IDs; if a station was used, name it precisely.
+- Plain-English translations are required wherever technical readings are cited.
+- Length guidance ("1 to 3 sentences") is enforceable; treat it as a hard ceiling unless the section explicitly allows more.
+
+=== END REPORT FORMAT ===
+
+The Builder must inject the REPORT FORMAT block verbatim into every Near Term / Session Report Prompt and every Long Range Report Prompt, immediately after the HARD RULES block and before any break-specific content. Do not paraphrase or condense the REPORT FORMAT block. Do not move sections around. Do not invent additional section delimiters.
+
+If the user's selected break has unusual structural needs that don't fit the body sections above (e.g. a tournament-style report with multi-day session windows), the Builder may add ONE additional optional body section per report type, named clearly with the same === delimiter style, but must not modify the HEADER or CLOSING.
+
+Other source guidance (lower priority than HARD RULES):
 
 Use official, non-commercial, or primary sources whenever available:
 - national weather services,
@@ -51,12 +237,6 @@ Use official, non-commercial, or primary sources whenever available:
 - port or harbor observations,
 - government storm charts,
 - rendered model fields from reputable public sources when clearly labeled as model output.
-
-Rendered-page rule:
-
-Use browser-rendered webpages whenever possible. Many buoy sources display valid values in rendered HTML while raw XML or API feeds are stale, incomplete, blank, or difficult to parse. The generated prompts must tell the user's AI to inspect the displayed page first when possible.
-
-If a rendered page fails, loads blank values, hides fields behind JavaScript, or is inaccessible, the generated prompts may allow official raw text or official spectral files as a fallback. When that happens, the report must explain why the fallback was used.
 
 Do not let the AI produce an error or empty report just because one feed is broken. It must diagnose source health, use substitutes where appropriate, and state the practical impact of missing data.
 
@@ -183,22 +363,18 @@ The Near Term / Session Report Prompt must:
 - incorporate a short Long Range Report excerpt if one exists;
 - incorporate validation history when Google Sheets or memory records exist;
 - output a structured storage record when Google Sheets is enabled;
-- avoid commercial surf forecast interpretations;
+- comply with the HARD RULES block at the top of the prompt — never use commercial surf-report interpretations, always use rendered station pages before raw feeds, label every cited reading with its freshness state;
+- comply with the REPORT FORMAT spec at the top of the prompt — every Session Report uses the standard HEADER, the six body sections in fixed order with === delimiters, and the standard CLOSING;
 - avoid false precision.
 
-The Near Term / Session Report output format must start with:
-
-"[Day] Session Report — [Break Name], [Month Day, Year], [Session Time]"
-
-Then it must provide:
-1. a short plain-language session narrative,
-2. session summary or user-selected suitability line,
-3. key data translation,
-4. source-health caveat if needed,
-5. Long Range Report excerpt if available,
-6. optional storage record if enabled.
+The Near Term / Session Report output format is fully specified in the REPORT FORMAT block at the top of the prompt. Do not invent additional output requirements here. The structure is:
+1. Standard HEADER (Report Type, Break, Evaluated Window, Generated At, Report ID).
+2. Body sections in this order: SESSION NARRATIVE, KEY DATA TRANSLATION, TIDE WINDOW, WIND AND SURFACE, LONG RANGE EXCERPT, optionally SUITABILITY.
+3. Standard CLOSING (Overall Confidence, Source Health, Data Gaps, optional Notes for Validation).
 
 Long Range Report Prompt requirements:
+
+The Long Range Report Prompt must comply with the HARD RULES block at the top of the prompt — never use commercial surf-report forecasts, predictions, or interpretations regardless of how attractive or convenient they appear, and always use rendered station pages before raw feeds when checking buoys for swell signals.
 
 The Long Range Report Prompt must identify potential swell events on a 3–21 day horizon, with emphasis on the next 10 days.
 
@@ -272,14 +448,12 @@ Time-horizon rules:
 - 5–10 days: source, direction window, possible arrival window, and confidence; avoid precise size.
 - 10–21 days: early signal only; no surf-height prediction.
 
-The Long Range Report output must include:
-1. Executive Radar,
-2. Event Table,
-3. North Pacific / regional upstream section as appropriate,
-4. South Pacific / opposite-hemisphere section as appropriate,
-5. Local Translation section,
-6. Session Report Excerpt,
-7. Confidence and Data Gaps.
+The Long Range Report output format is fully specified in the REPORT FORMAT block at the top of the prompt. Do not invent additional output requirements here. The structure is:
+1. Standard HEADER (Report Type, Break, Evaluated Window, Generated At, Report ID).
+2. Body sections in this order: TOP-LINE SUMMARY, EVENT TABLE, UPSTREAM SECTIONS (with hemisphere subsections as needed), LOCAL TRANSLATION, SESSION REPORT EXCERPT.
+3. Standard CLOSING (Overall Confidence, Source Health, Data Gaps, optional Notes for Validation).
+
+Note: "TOP-LINE SUMMARY" replaces what was previously called "Executive Radar." Use the new name verbatim.
 
 Validation Layer requirements:
 
@@ -367,56 +541,87 @@ External observations never override the user's Reality Score. Store them separa
 
 Google Sheets Web App requirements:
 
-If the user selects Google Sheets support, provide:
-1. recommended sheet tabs,
-2. column schema,
-3. complete Apps Script Web App code,
-4. shared-secret handling,
-5. example POST payloads,
-6. step-by-step deployment instructions,
-7. instructions for using the Web App URL in generated prompts,
-8. one safe test record the user can submit before relying on the setup.
+If the user selects Google Sheets support, do not generate Apps Script code from scratch. A vetted reference implementation exists at:
 
-Recommended tabs:
-- sessions,
-- long_range_reports,
-- long_range_events,
-- buoy_observations,
-- tide_observations,
-- wind_observations,
-- validations,
-- external_observations,
-- analog_matches,
-- source_health.
+https://github.com/nfischbein/Surf-Report-Builder/blob/main/script-b/Code.gs
 
-Google Sheets is optional for basic reports. When enabled, it works as a single shared read/write layer for the Near Term / Session Report Prompt, Long Range Report Prompt, and Validation Layer. It is strongly recommended for Validation because it preserves report predictions, source data, user scores, and historical analogs.
+Direct the user to copy that file verbatim. Do not attempt to rewrite, optimize, condense, or "improve" it. The schema, error handling, and authentication pattern are stable and the rest of the system depends on them.
 
-The generated Google Sheets setup must be practical for a non-developer:
-- tell the user to create a Google Sheet;
-- tell the user to open Extensions → Apps Script;
-- provide complete copy/paste Apps Script code;
-- tell the user where to put the shared secret;
-- tell the user how to deploy as a Web App;
-- explain what “Execute as me” means;
-- explain the access setting tradeoff;
-- tell the user to copy the Web App URL;
-- provide a small test payload;
-- explain how to paste the Web App URL and shared secret into the generated report prompts.
+Tell the user to follow these steps in order:
 
-The generated Apps Script must:
-- accept POST requests;
-- parse JSON;
-- verify the shared secret;
-- reject missing or incorrect secrets;
-- route each payload to the correct tab based on a `record_type` field;
-- create headers if a tab is empty;
-- append structured rows;
-- return JSON success or error responses;
-- avoid storing unnecessary sensitive information.
+1. Create a new Google Sheet (or open an existing one they want to dedicate to surf reports). Give it a recognizable name.
+
+2. Open Extensions → Apps Script. A new tab opens with starter code.
+
+3. Delete any starter code in the editor.
+
+4. Open the reference Code.gs file at the URL above. Click the "Raw" button on GitHub. Select all, copy, and paste into the Apps Script editor.
+
+5. Find the line near the top that reads:
+   const SHARED_SECRET = 'CHANGE_ME_TO_A_RANDOM_STRING';
+   Change the string between the quotes to a random value of their own. Any 16+ character random string works. Tell them to keep this private — it is the only thing protecting their sheet.
+
+6. Save (disk icon or Cmd/Ctrl+S).
+
+7. Click Deploy → New deployment.
+   - Click the gear icon next to "Select type" and choose Web app.
+   - Description: anything they want, e.g. "Surf Report Builder v1".
+   - Execute as: Me.
+   - Who has access: Anyone.
+   Explain plainly: "Anyone" sounds scary, but Google requires it so the AI can POST without logging in. The shared secret is what actually protects the data — anyone without it gets rejected.
+
+8. Click Deploy. Authorize when prompted (the consent screen will warn that the app is unverified — that's expected because they wrote it themselves; click Advanced → Go to [project name] → Allow).
+
+9. Copy the Web App URL Google shows after deployment. It looks like:
+   https://script.google.com/macros/s/AKfyc.../exec
+
+10. Test the deployment by visiting the URL in a browser. They should see a JSON response that lists the accepted record types. If they see an error page or HTML, something went wrong with deployment.
+
+11. Provide the user with one safe test payload they can run (using a curl command or any HTTP tool) to confirm writes work end-to-end. Use record_type "validation" with a clearly-marked test session_id like "test_setup_check". Tell them they can delete that test row from their sheet afterward.
+
+After setup, the user has two values they need to paste into generated report prompts when those prompts ask for them:
+1. Their Web App URL.
+2. Their shared secret.
+
+The generated Near Term / Session Report Prompt, Long Range Report Prompt, and Validation Layer must each include placeholders for these two values, with clear instructions for the user to fill them in once after generation.
+
+Payload format the AI must use when posting to the Web App:
+
+{
+  "shared_secret": "<user's secret>",
+  "record_type": "<one of the accepted types>",
+  "data": {
+    <fields matching the schema for that record_type>
+  }
+}
+
+Accepted record types and the tab each writes to:
+- session_report → sessions
+- long_range_report → long_range_reports
+- long_range_event → long_range_events
+- buoy_observation → buoy_observations
+- tide_observation → tide_observations
+- wind_observation → wind_observations
+- validation → validations
+- external_observation → external_observations
+- analog_match → analog_matches
+- source_health → source_health
+
+The exact column schema for each tab is defined in the SCHEMA constant at the top of Code.gs. The generated prompts must match those column names exactly when constructing the data object. Unknown keys are silently ignored by the Apps Script (and returned in the response for debugging), so harmless to include extras, but missing required fields will appear as blank cells.
+
+To group related rows across tabs (e.g. a session report and its associated buoy observations), the AI should generate a single session_id per report run and reuse it across all related writes. Format suggestion: ISO-like timestamp such as "2026-04-25T0630" for a 6:30 AM session on April 25, 2026.
+
+If the deployed Web App returns an auth failure or other error, the generated prompts must surface that error to the user verbatim rather than silently dropping the write. The user needs to know when their archive is not being updated.
 
 Feedback and questions about the public kit belong on the project website. Do not mix public website feedback with a user's personal validation archive.
 
 Final deliverable format:
+
+Every generated prompt — Near Term / Session Report Prompt, Long Range Report Prompt, Validation Layer instructions — must begin with two verbatim blocks defined earlier in this Builder Prompt, in this exact order:
+1. The HARD RULES block (=== BEGIN HARD RULES === through === END HARD RULES ===).
+2. The REPORT FORMAT block (=== BEGIN REPORT FORMAT === through === END REPORT FORMAT ===), included only for the two report-generating prompts (Session Report Prompt and Long Range Report Prompt). The Validation Layer prompt does not produce reports and does not need the REPORT FORMAT block.
+
+Both blocks must be the first content the downstream AI encounters. Do not paraphrase, condense, summarize, or reorder either block. Do not move them lower in the prompt. The downstream AI's first impressions of its task come from these two blocks.
 
 If Quick Start:
 - provide the Local Surf Model summary;
