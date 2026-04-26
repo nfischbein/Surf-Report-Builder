@@ -159,10 +159,28 @@
               and AI mistakes faster than anyone else.
             </p>
           </div>
-          <div class="feedback-options">
-            <span class="status-pill muted">Feedback link next</span>
-            <p>Before sharing broadly, add one simple feedback path: Google Form, project email, GitHub issues, or a Reddit thread.</p>
-          </div>
+          <form class="feedback-form" data-feedback-form>
+            <input type="hidden" name="source" value="AI Surf Report Builder website" />
+            <label class="feedback-trap" aria-hidden="true">
+              <span>Website</span>
+              <input type="text" name="website" tabindex="-1" autocomplete="off" />
+            </label>
+            <label>
+              <span>What should be fixed or improved?</span>
+              <textarea name="message" rows="5" required placeholder="Missing buoy, confusing instruction, bad source rule, broken download, etc."></textarea>
+            </label>
+            <label>
+              <span>Your email, if you want a reply</span>
+              <input type="email" name="reply_to" placeholder="Optional" />
+            </label>
+            <button class="button button-primary" type="submit">Send feedback</button>
+            <p class="feedback-note" data-feedback-status>
+              Feedback is sent through a private relay. The recipient email is not exposed on this page.
+            </p>
+            <p class="feedback-note setup-warning" data-feedback-setup>
+              Feedback relay not connected yet. Add your deployed Apps Script Web App URL in <code>script.js</code>.
+            </p>
+          </form>
         </div>
       </section>
     </main>

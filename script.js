@@ -1,7 +1,12 @@
 (function () {
+  const FEEDBACK_ENDPOINT = '';
+  const feedbackLoadedAt = Date.now();
   const root = document.documentElement;
   const themeButton = document.querySelector('[data-theme-toggle]');
   const toast = document.querySelector('[data-toast]');
+  const feedbackForm = document.querySelector('[data-feedback-form]');
+  const feedbackStatus = document.querySelector('[data-feedback-status]');
+  const feedbackSetup = document.querySelector('[data-feedback-setup]');
   let theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   let toastTimer;
 
@@ -113,6 +118,77 @@
       showToast('Copy failed. Select and copy manually.');
     }
   });
+
+  if (feedbackForm) {
+    if (!FEEDBACK_ENDPOINT) {
+      feedbackSetup?.classList.add('show');
+    }
+
+    feedbackForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!FEEDBACK_ENDPOINT) {
+        feedbackStatus.textContent = 'Feedback relay is not connected yet.';
+        showToast('Feedback relay not connected yet.');
+        return;
+      }
+
+      const submitButton = feedbackForm.querySelector('button[type="submit"]');
+      const formData = new FormData(feedbackForm);
+      const message = String(formData.get('message') || '').trim();
+      const honeypot = String(formData.get('website') || '').trim();
+      const payload = {
+        source: formData.get('source') || 'AI Surf Report Builder website',
+        message,
+        reply_to: String(formData.get('reply_to') || '').trim(),
+        website: honeypot,
+        page_url: window.location.href,
+        page_origin: window.location.origin,
+        user_agent: navigator.userAgent,
+        form_age_ms: Date.now() - feedbackLoadedAt,
+        created_at: new Date().toISOString(),
+      };
+
+      if (honeypot) {
+        feedbackForm.reset();
+        feedbackStatus.textContent = 'Feedback sent. Thanks.';
+        showToast('Feedback sent');
+        return;
+      }
+
+      if (message.length < 5) {
+        feedbackStatus.textContent = 'Add a little more detail before sending.';
+        return;
+      }
+
+      if (message.length > 3000) {
+        feedbackStatus.textContent = 'Please shorten the note before sending.';
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = 'Sending…';
+      feedbackStatus.textContent = 'Sending feedback…';
+
+      try {
+        await fetch(FEEDBACK_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: JSON.stringify(payload),
+        });
+
+        feedbackForm.reset();
+        feedbackStatus.textContent = 'Feedback sent. Thanks.';
+        showToast('Feedback sent');
+      } catch (error) {
+        feedbackStatus.textContent = 'Feedback could not be sent. Try again later.';
+        showToast('Feedback failed');
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send feedback';
+      }
+    });
+  }
 
   loadPromptWindows();
 })();
