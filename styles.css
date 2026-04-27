@@ -681,15 +681,13 @@ li {
 }
 
 .prompt-panel {
+  overflow: hidden;
+  grid-column: 1 / -1;
+  margin-top: var(--space-6);
   border: 1px solid color-mix(in srgb, var(--color-border) 78%, transparent);
   border-radius: var(--radius-2xl);
   background: color-mix(in srgb, var(--color-surface) 88%, transparent);
   box-shadow: var(--shadow-sm);
-}
-
-.prompt-panel {
-  overflow: hidden;
-  margin-top: var(--space-6);
 }
 
 .prompt-panel-header {
