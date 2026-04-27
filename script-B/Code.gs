@@ -39,7 +39,7 @@
  *   - It does not send any data anywhere except your own sheet.
  */
 
-const SHARED_SECRET = 'CHANGE_ME_TO_A_RANDOM_STRING';
+const SHARED_SECRET = 'jbc*nxp1xgu3cgv2JYR';
 
 // Schema: each record_type maps to a tab name and an ordered column list.
 // Headers are written automatically the first time a tab receives data.
