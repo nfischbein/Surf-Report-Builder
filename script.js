@@ -139,9 +139,11 @@
       const message = String(formData.get('message') || '').trim();
       const honeypot = String(formData.get('website') || '').trim();
       const payload = {
-        source: formData.get('source') || 'AI Surf Report Builder website',
+        source: formData.get('source') || 'Surf Report Builder website',
         message,
         reply_to: String(formData.get('reply_to') || '').trim(),
+        break_name: String(formData.get('break_name') || '').trim(),
+        feedback_type: String(formData.get('feedback_type') || '').trim(),
         website: honeypot,
         page_url: window.location.href,
         page_origin: window.location.origin,
@@ -187,7 +189,7 @@
         showToast('Feedback failed');
       } finally {
         submitButton.disabled = false;
-        submitButton.textContent = 'Send feedback';
+        submitButton.textContent = 'Send it';
       }
     });
   }

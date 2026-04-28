@@ -1091,3 +1091,117 @@ summary {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =====================================================================
+   Additions for the section-by-section homepage rewrite (April 2026)
+   New rules only — no existing rules modified.
+   ===================================================================== */
+
+/* -- Hero recursive H2 line (sits between H1 and lede) -------------- */
+
+.hero-h2-line {
+  margin: 0 0 var(--space-4);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* -- Card 5 in Data sources: the "Not used" anti-card -------------- */
+/* Visually distinct from the four positive sources without screaming.
+   Uses muted border, slightly recessed background, and italicizes the
+   detail line to telegraph "this is the inverse statement". */
+
+.sources-list-excluded {
+  border-style: dashed !important;
+  border-color: color-mix(in srgb, var(--color-border) 45%, transparent) !important;
+  background: color-mix(in srgb, #083b69 14%, transparent) !important;
+}
+
+.sources-list-excluded strong {
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+}
+
+.sources-list-excluded span {
+  font-style: italic;
+}
+
+/* -- Footer: stacked layout with About blurb ----------------------- */
+/* Grid replaces the original flex row when the footer-about element
+   is present. Original .footer-grid flex rule remains the fallback. */
+
+.footer-grid:has(.footer-about) {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+  gap: var(--space-6);
+}
+
+.footer-about {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.footer-about-text {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  max-width: 64ch;
+}
+
+.footer-disclaimer {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  font-style: italic;
+  max-width: 64ch;
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid color-mix(in srgb, var(--color-border) 36%, transparent);
+}
+
+.footer-credit {
+  margin: 0;
+  color: color-mix(in srgb, var(--color-text-muted) 78%, transparent);
+  font-size: var(--text-xs, 0.78rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* -- Feedback form: select element matches input/textarea styling --- */
+/* The current feedback-form rules style input and textarea; the new
+   dropdown needs the same treatment for visual consistency. */
+
+.feedback-form select {
+  font-family: inherit;
+  font-size: inherit;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--color-border) 60%, transparent);
+  border-radius: var(--radius-md, 10px);
+  background: var(--color-surface, rgba(4, 28, 44, 0.04));
+  color: var(--color-text);
+  font-weight: 400;
+  letter-spacing: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--space-4) center;
+  background-size: 12px 8px;
+  padding-right: calc(var(--space-4) + 24px);
+}
+
+.feedback-form select:focus {
+  outline: 2px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
+  outline-offset: 1px;
+}
