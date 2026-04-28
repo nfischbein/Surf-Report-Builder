@@ -81,7 +81,7 @@
             </div>
             <h2>Copy once. Surf forever.</h2>
             <p>
-              The Builder is a single piece of text. Copy it, paste it into your AI, and answer three quick questions about your break. It hands you back three custom prompts you save and run any time you want a fresh report.
+              The Builder is a single piece of text. Copy it, paste it into your AI, and answer three quick questions. It hands you back three custom prompts you save and run any time you want a fresh report.
             </p>
             <p class="builder-preview-tagline">
               <strong>Researches your break.</strong> The Builder researches your local buoys, tides, weather sources, and break-specific quirks — then bakes them into personalized prompts just for you.
@@ -111,14 +111,14 @@
               <span class="how-step-number">1</span>
               <h3>Copy the Builder. Paste it into your favorite AI.</h3>
               <p>
-                Grab it from below and drop it into your favorite AI. Answer three quick questions, including where and when you surf, and the Builder takes it from there.
+                Grab it below and drop it into your favorite AI. Answer three quick questions, including where and when you surf, and the Builder takes it from there.
               </p>
             </li>
             <li class="how-step">
               <span class="how-step-number">2</span>
               <h3>Save your custom prompts.</h3>
               <p>
-                The Builder hands you back prompts tuned to you and your spot — a Session Report prompt, a Long Range prompt, and an optional Tracking prompt that lets the system learn from your sessions over time. Save them somewhere you can find them.
+                The Builder hands you back prompts tuned for you and your spot — a Session Report prompt, a Long Range prompt, and an optional Tracking prompt that lets the system learn from your sessions over time. Save them somewhere you can find them.
               </p>
             </li>
             <li class="how-step">
@@ -179,7 +179,7 @@
             <p class="eyebrow">Get the Builder</p>
             <h2>Copy it. Paste it into your AI.</h2>
             <p>
-              Surf Report Builder is a single piece of text. Copy it below, paste it into your favorite AI, and answer questions when it asks.
+              Surf Report Builder is a single piece of text. Copy it below, paste it into your favorite AI, and answer three quick questions.
             </p>
           </div>
 
@@ -200,7 +200,7 @@
           </div>
 
           <p class="manual-inline-note">
-            Curious about how it works under the hood? <a href="./ai_surf_report_builder_system_guide_v1_0.pdf" download>Read the Design Notes</a> — a deeper reference for anyone who wants to understand the design.
+            Curious how it works? <a href="./ai_surf_report_builder_system_guide_v1_0.pdf" download>Read the Design Notes</a>.
           </p>
         </div>
       </section>
@@ -211,7 +211,7 @@
             <p class="eyebrow">Data sources</p>
             <h2>Where the data comes from.</h2>
             <p>
-              Most AI surf prompts can't check live data. They rely on whatever the model already knows — usually months out of date — or on web searches that pull stale cached pages.
+              Most AI surf prompts can't check live data. They rely on whatever the model already knows — usually months out of date — or on web searches that pull bad buoy feeds or stale cached pages.
             </p>
             <p>
               The Builder takes a different approach. When you run a custom prompt, it pulls from a small server we maintain that fetches data live from official sources before your AI sees it. No commercial forecasts. No interpretation. Just the actual numbers.
@@ -242,7 +242,7 @@
           </ul>
 
           <p class="sources-footer">
-            Every reading is timestamped. Every source is named in the report. If a sensor is offline, the report says so instead of guessing.
+            Every reading is timestamped. Every source is named in the report. If a sensor is offline, the report tells you instead of guessing.
           </p>
         </div>
       </section>
@@ -286,14 +286,14 @@
             <details>
               <summary>Where do I save my custom prompts?</summary>
               <p>
-                Anywhere you can find them later. ChatGPT and Claude both have saved prompts features built in. You could also paste them into a Notes app, a Google Doc, or anywhere you already keep useful text. The Builder is just text — it works wherever you put it.
+                Anywhere you can find them later. ChatGPT and Claude both have saved prompts features built in. You could also paste them into a Notes app, a Google Doc, an email or draft, or anywhere you already keep useful text. 
               </p>
             </details>
 
             <details>
               <summary>What if there's no buoy near my break?</summary>
               <p>
-                Most coastal breaks have a usable buoy somewhere nearby — often farther offshore than you'd expect. The Builder's research step looks for the closest usable stations and builds a local model that accounts for the distance and direction.
+                Most coastal breaks have a usable buoy somewhere nearby — sometimes farther offshore than you'd expect. The Builder's research step looks for the closest usable stations and builds a local model that accounts for the distance and direction.
               </p>
               <p>
                 Breaks in genuinely instrument-poor areas (some remote stretches of coast) will produce reports with lower confidence, which the system labels honestly rather than hides.
@@ -303,7 +303,7 @@
             <details>
               <summary>Why doesn't it just tell me whether to surf today?</summary>
               <p>
-                That's up to you. Crowds, board, skill level, what you're trying to work on — none of that fits in a forecast. Your Session Report tells you what's likely to happen at your break. You make the call.
+                That's up to you. Temps, crowds, board, skill level, what you're trying to work on — none of that fits in a forecast. Your Session Report tells you what's likely to happen at your break. You make the call.
               </p>
             </details>
 
@@ -320,7 +320,7 @@
                 Sometimes it will. Surf forecasting is genuinely hard — sensors go offline, models miss things, the ocean does what it wants. The Builder doesn't pretend otherwise. Every report names its sources, flags confidence honestly, and includes a "what could make this wrong" line so you know which way to be skeptical.
               </p>
               <p>
-                The optional Tracking prompt is built for this. After you surf, you log how close reality felt to the report. Over time that history helps the system tune to your specific break.
+                The optional Tracking prompt is built for this too. After you surf, you log how close reality felt to the report. Over time that history helps the system tune to your specific break.
               </p>
             </details>
 
@@ -337,10 +337,13 @@
             <details>
               <summary>Is my data going anywhere?</summary>
               <p>
-                The Builder itself doesn't send anything anywhere. Your conversation with your AI stays between you and your AI provider — the same as any other AI conversation.
+                The Builder itself doesn't send anything anywhere. The optional Tracking prompt stores your scores in a Google Sheet that you create and own. Nothing is sent to us. Nothing is shared with other users.
               </p>
+            </details>
+            <details>
+              <summary>Who built this?</summary>
               <p>
-                The optional Tracking prompt stores your scores in a Google Sheet that you create and own. Nothing is sent to us. Nothing is shared with other users.
+                This project is built and maintained by a Southern California surfer with 20+ years in the water. Started as a personal tool for tomorrow-morning decisions — surf, or paddle? — and grew into this.
               </p>
             </details>
           </div>
@@ -398,9 +401,6 @@
     <footer class="site-footer">
       <div class="container footer-grid">
         <div class="footer-about">
-          <p class="footer-about-text">
-            Built and maintained by a Southern California surfer with 20+ years in the water. Started as a personal tool for tomorrow-morning decisions — surf, or paddle? — and grew into this.
-          </p>
           <p class="footer-disclaimer">
             Surf Report Builder is an experimental tool. Always check real conditions before entering the ocean.
           </p>
