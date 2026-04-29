@@ -1232,10 +1232,9 @@ summary {
 
 .beta-callout {
   padding: var(--space-4) var(--space-5);
-  border: 1px solid color-mix(in srgb, var(--color-primary) 38%, transparent);
   border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
-  color: var(--color-text);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
   font-size: var(--text-sm);
   line-height: 1.55;
 }
@@ -1245,7 +1244,7 @@ summary {
 }
 
 .beta-callout-heading {
-  color: var(--color-primary);
+  color: var(--color-text-inverse);
   font-family: var(--font-display);
   font-weight: 800;
   font-size: var(--text-sm);
@@ -1253,12 +1252,12 @@ summary {
 }
 
 .beta-callout a {
-  color: var(--color-primary);
+  color: var(--color-text-inverse);
   font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }
 
 .beta-callout a:hover {
-  color: var(--color-primary-hover);
+  color: color-mix(in srgb, var(--color-text-inverse) 75%, transparent);
 }
