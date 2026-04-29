@@ -1205,3 +1205,60 @@ summary {
   outline: 2px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
   outline-offset: 1px;
 }
+
+/* =========================================================
+   Beta tag (in nav, next to brand wordmark) +
+   Beta callout (top of hero copy)
+   Added 2026-04-29 for pre-launch beta state.
+   Remove both blocks at public launch.
+   ========================================================= */
+
+.brand-beta-tag {
+  display: inline-grid;
+  place-items: center;
+  margin-inline-start: var(--space-2);
+  padding: 0.1rem var(--space-2);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 50%, transparent);
+  border-radius: var(--radius-full);
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  font-family: var(--font-body);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.6;
+}
+
+.beta-callout {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 38%, transparent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.beta-callout p + p {
+  margin-top: var(--space-2);
+}
+
+.beta-callout-heading {
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--text-sm);
+  letter-spacing: -0.01em;
+}
+
+.beta-callout a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.beta-callout a:hover {
+  color: var(--color-primary-hover);
+}
