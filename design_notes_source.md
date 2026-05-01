@@ -1,10 +1,24 @@
-# Surf Report Builder — Design Notes v1.0
+# Surf Report Builder — Design Notes v1.1
 
 **Build your own surf report.**
 
 A reference for the system, the prompts it generates, the data they pull from, and the choices behind the design.
 
 surfreportbuilder.com
+
+---
+
+## What's New In v1.1
+
+This is the first content update to the Design Notes since v1.0.
+
+What changed:
+
+- **Runtime guidance** ("Which AI Should I Use?") rewritten to reflect cross-runtime testing completed since v1.0. The Design Notes now point readers to the website for the current recommendation, since runtime behavior changes faster than the PDF can be republished.
+- **"What Could Make This Wrong"** described as a four-element structure (failure mechanism, empirical check, check performability, plain-language implication). The Builder Prompt now requires all four elements rather than treating the section as a single hedging line, and the Design Notes describe what readers will see in their reports.
+- Minor wording clarifications throughout. No change to the Worker, the source policy, the five parts, the local model, the Tracking loop, the Google Sheets setup, the confidence vocabulary, or the international expansion roadmap.
+
+If you have v1.0 saved, the differences above are the practical ones. The rest of the document still applies.
 
 ---
 
@@ -168,9 +182,17 @@ Example invocations once your prompts are saved:
 
 This system depends on your AI being able to fetch current data from the web in real time. If you're using an AI without web access, it won't work — that's a hard floor, not a preference.
 
-So far the system has been most thoroughly tested on Claude with web search enabled. Other AIs with web browsing capability may work — your mileage may vary depending on the AI's web-fetching reliability. We'll do more testing across runtimes and update this section as we learn more, including from user feedback.
+Beyond that hard floor, runtime choice matters more than it should. AI tools differ in how they fetch live data, how aggressively they cache responses, and whether they fabricate data when fetches fail. The differences are large enough that the same prompt can produce a useful report on one runtime and an unusable one on another.
 
-One practical tip. If your first report comes back with "Speculative" confidence and several sources marked offline, try again in five minutes. An actual outage will still be there on retry, but transient hiccups usually clear.
+The current recommendation lives on the website rather than in this PDF, because runtime behavior changes faster than the PDF can be republished. Visit https://surfreportbuilder.com for the latest guidance, including which runtimes are currently recommended, which to avoid, and any setup steps specific to a given runtime.
+
+A few things that are true regardless of which runtime you pick:
+
+- **Free tiers tend to underperform.** Across the runtimes tested so far, free-tier AI assistants have shown a mix of stale-cache behavior, multi-fetch failures, and (in at least one case) silent fabrication of data that wasn't actually fetched. Paid tiers aren't immune to all these problems, but they currently have the best track record.
+- **Silent fabrication is the one disqualifying failure.** If a runtime invents data instead of saying it couldn't reach a source, the system's defensive checks can't catch it — there's nothing to check against. Stale data and outright fetch failures are recoverable (the report flags them and degrades confidence honestly); fabrication isn't. This is why the website's recommendation rules out specific runtimes by name.
+- **Cache state varies.** Even on a recommended runtime, individual sessions can hit a stale cache and produce a report at Medium or Low confidence rather than High. This is normal and the system handles it correctly. If your first report comes back with several sources marked offline or stale, try again in a few minutes — transient cache issues usually clear, and a real outage will still be there on retry.
+
+Treat the website's runtime recommendation as the current best call, not a permanent verdict. If you find a runtime that works well for you and isn't currently listed, the feedback link on the website is the right place to share that finding.
 
 ---
 
@@ -219,7 +241,7 @@ Your reports will:
 - use measured data and observed descriptions, not commercial surf forecasts, ratings, models, or interpretations;
 - explain stale, missing, or conflicting data instead of hiding it;
 - confirm source timestamps before trusting readings;
-- name a specific failure mode under "What Could Make This Wrong" instead of vague hedging;
+- name a specific failure mode under "What Could Make This Wrong" instead of vague hedging — see the section below for the four-element structure;
 - get better over time if you use the Tracking Prompt with Google Sheets to build a personal history of how reports compared to reality.
 
 Reports come back in two layers — the plain-language section is what most readers want. The technical appendix below it is for when you want to verify the call yourself, see the source URLs, or feed the data into a record.
@@ -299,10 +321,21 @@ Each report includes:
 
 - an opening header with the break, date, session window, run timestamp, and overall confidence rating;
 - a plain-language section called **The Call** — three to five sentences covering size, tide, wind, and who the session favors;
-- a one-line **What Could Make This Wrong** — names a specific failure mode for the call rather than vague hedging;
+- a structured **What Could Make This Wrong** section — see the next subsection for the four-element format;
 - a short **Why Confidence Is High / Medium / Low / Speculative** — explains the rating in plain English;
 - a technical appendix with source data, freshness states, conflict resolution if any, and a structured Source Health summary;
 - an optional structured storage record when Google Sheets is enabled.
+
+### What Could Make This Wrong: the four-element structure
+
+Earlier versions of the system used "What Could Make This Wrong" as a single sentence naming a possible failure. That worked, but the line often collapsed into hedging like *"if the swell direction is wrong, this call is wrong"* — true, but not actually useful. The current Session Report Prompt requires the section to cover four elements:
+
+1. **Failure mechanism** — what could go wrong physically. *("The bay could be shadowed harder than usual today.")*
+2. **Empirical check** — which reading at which station would catch it. *("San Pedro buoy would normally let us check this — when San Pedro shows materially more long-period south energy than Santa Monica Bay, the bay is filtering harder and the call is too optimistic.")*
+3. **Check performability** — whether that check was performable for this report. *("San Pedro was unavailable this run.")*
+4. **Plain-language implication** — what the missing data means for the user, in terms they can act on. *("If you arrive and the sets feel smaller and more spaced out than the report suggests, the shadow effect is the most likely reason, and the day is probably small-and-soft rather than fixable by waiting.")*
+
+The fourth element is the one most often missing in earlier versions. Without it, the section can describe an uncertainty without telling the reader what to do about it. With it, the reader leaves the section knowing both *what might be wrong* and *what they should watch for at the beach* if it turns out to be.
 
 ---
 
@@ -573,6 +606,6 @@ https://surfreportbuilder.com
 
 The current Builder prompt is always available at https://surfreportbuilder.com — copy from the website's copy window for best results. Copying from a PDF can introduce line-break or formatting errors.
 
-The website always reflects the latest version. These Design Notes describe how the system works; the website is the canonical source for the prompt itself.
+The website always reflects the latest version. These Design Notes describe how the system works; the website is the canonical source for the prompt itself, and for the current runtime recommendation.
 
 For anyone who wants to see version history, contribute, or fork the project, the source is on GitHub at https://github.com/nfischbein/Surf-Report-Builder.

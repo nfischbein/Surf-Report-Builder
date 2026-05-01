@@ -36,14 +36,13 @@
 
     <header class="site-header" data-header>
       <nav class="nav container" aria-label="Primary navigation">
-        <a href="#top" class="brand" aria-label="Surf Report Builder home (beta)">
+        <a href="#top" class="brand" aria-label="Surf Report Builder home">
           <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
             <path d="M7 30c7-11 15-16 25-16 4 0 7 1 10 3-4 1-7 3-9 6-3 4-7 7-13 7H7Z" />
             <path d="M7 30c7 0 11 5 17 5 7 0 10-5 17-5" />
             <path d="M24 10v-4M14 14l-3-3M34 14l3-3" />
           </svg>
           <span>Surf Report Builder</span>
-          <span class="brand-beta-tag" aria-label="beta">Beta</span>
         </a>
         <div class="nav-links">
           <a href="#how">How it works</a>
@@ -61,12 +60,6 @@
       <section class="hero section" id="top">
         <div class="container hero-grid">
           <div class="hero-copy">
-            <aside class="beta-callout" role="note" aria-label="Beta notice">
-              <p class="beta-callout-heading">This is a beta.</p>
-              <p>
-                Our test runs are mostly working, but AI tools handle live data fetching unevenly and we're still learning what breaks where. If something doesn't work as described, please tell us via <a href="#feedback">the feedback form below</a>.
-              </p>
-            </aside>
             <p class="eyebrow">Surf Report Builder</p>
             <h1>Build your own surf report.</h1>
             <p class="hero-h2-line">Build the prompts that build your reports.</p>
@@ -206,12 +199,12 @@
             </div>
             <pre class="prompt-window" id="systemPrompt" data-prompt-src="./system_builder_prompt.txt"><code>Loading the Builder…</code></pre>
             <p class="prompt-note">
-              Tip: copy from this page for best results — copy-paste here preserves formatting that long prompts can rely on.
+              Tip: copy from this page, not the Design Notes — PDFs sometimes break long prompts.
             </p>
           </div>
 
           <p class="manual-inline-note">
-            Curious how it works? <a href="./surf_report_builder_design_notes_v1_0.pdf" download>Read the Design Notes</a>.
+            Curious how it works? <a href="./ai_surf_report_builder_system_guide_v1_0.pdf" download>Read the Design Notes</a>.
           </p>
         </div>
       </section>
@@ -283,26 +276,7 @@
             <details>
               <summary>Which AI should I use?</summary>
               <p>
-                This system has been tested and works on ChatGPT Plus and Perplexity Computer. It has also worked on Claude Pro (Sonnet 4.6 or later).
-              </p>
-              <p>
-                Free tiers are on our radar, but so far free models don't pull live data reliably enough to produce useful reports. We'll update this when that changes.
-              </p>
-              <p>
-                We're actively improving the Builder, so it's possible an update breaks something. If a report fails your tests, let us know via <a href="#feedback">the feedback form below</a>.
-              </p>
-            </details>
-
-            <details>
-              <summary>Why is my report showing Speculative confidence or worker_stale warnings?</summary>
-              <p>
-                Those flags mean your AI didn't pull current data from one or more sources — it pulled a saved copy instead of fetching live. Sometimes AIs do this. Surf Report Builder detected and flagged it rather than presenting old numbers as current.
-              </p>
-              <p>
-                A few things to try: start a fresh chat and run the report again, or wait 20–30 minutes and retry. If it keeps happening, switching to one of the other recommended AIs usually resolves it.
-              </p>
-              <p>
-                A Speculative report means your AI didn't deliver what Surf Report Builder asked for this run. It's telling you that honestly instead of guessing around it.
+                You'll need an AI with live web access. So far we've tested most thoroughly on Claude. We'll do more testing and hope to get user feedback to update this section soon.
               </p>
             </details>
 
@@ -373,7 +347,7 @@
             <details>
               <summary>Who built this?</summary>
               <p>
-                This project is built and maintained by a Southern California surfer with 20+ years in the water. Started as a personal tool for tomorrow-morning decisions — surf, or paddle? — and grew into this.
+                This project is built and maintained by a Southern California surfer with 20+ years in the water. Started as a personal tool for tomorrow-morning decisions — surf or paddle? — and grew into this.
               </p>
             </details>
           </div>
@@ -437,7 +411,7 @@
         </div>
         <div class="footer-meta">
           <div class="footer-links">
-            <a href="./surf_report_builder_design_notes_v1_0.pdf" download>Design Notes (PDF)</a>
+            <a href="./ai_surf_report_builder_system_guide_v1_0.pdf" download>Design Notes (PDF)</a>
             <a href="https://github.com/nfischbein/Surf-Report-Builder" target="_blank" rel="noopener">Source on GitHub</a>
             <a href="#top">Back to top</a>
           </div>
