@@ -64,7 +64,7 @@
             <aside class="beta-callout" role="note" aria-label="Beta notice">
               <p class="beta-callout-heading">This is a beta.</p>
               <p>
-                If you were invited or stumbled across this site, thanks for taking a look — we're still testing and not ready for public launch. Feedback is welcome via <a href="#feedback">the form below</a>.
+                Our test runs are mostly working, but AI tools handle live data fetching unevenly and we're still learning what breaks where. If something doesn't work as described, please tell us via <a href="#feedback">the feedback form below</a>.
               </p>
             </aside>
             <p class="eyebrow">Surf Report Builder</p>
@@ -283,7 +283,26 @@
             <details>
               <summary>Which AI should I use?</summary>
               <p>
-                You'll need an AI with live web access. So far we've tested most thoroughly on Claude. We'll do more testing and hope to get user feedback to update this section soon.
+                This system has been tested and works on ChatGPT Plus and Perplexity Computer. It has also worked on Claude Pro (Sonnet 4.6 or later).
+              </p>
+              <p>
+                Free tiers are on our radar, but so far free models don't pull live data reliably enough to produce useful reports. We'll update this when that changes.
+              </p>
+              <p>
+                We're actively improving the Builder, so it's possible an update breaks something. If a report fails your tests, let us know via <a href="#feedback">the feedback form below</a>.
+              </p>
+            </details>
+
+            <details>
+              <summary>Why is my report showing Speculative confidence or worker_stale warnings?</summary>
+              <p>
+                Those flags mean your AI didn't pull current data from one or more sources — it pulled a saved copy instead of fetching live. Sometimes AIs do this. Surf Report Builder detected and flagged it rather than presenting old numbers as current.
+              </p>
+              <p>
+                A few things to try: start a fresh chat and run the report again, or wait 20–30 minutes and retry. If it keeps happening, switching to one of the other recommended AIs usually resolves it.
+              </p>
+              <p>
+                A Speculative report means your AI didn't deliver what Surf Report Builder asked for this run. It's telling you that honestly instead of guessing around it.
               </p>
             </details>
 
