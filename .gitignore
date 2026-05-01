@@ -1,0 +1,62 @@
+# .gitignore — Surf Report Builder public repo
+# Last updated: 2026-05-01
+
+# === macOS system files ===
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# === Editor / IDE artifacts ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cursor/
+
+# === Internal working documents (not for public repo) ===
+# These markdown files are project-internal planning artifacts, not user-facing.
+# They live elsewhere (local notes, private repo, or cloud sync).
+design_principles.md
+surf_report_builder_improvements.md
+roadmap.md
+closeout_*.md
+cross_runtime_test_*.md
+friend_rollout_plan.md
+improvements_doc_*.md
+
+# === Test artifacts and tracking workbooks ===
+surf_report_test_tracking.xlsx
+*_test_log.md
+*_test_results.md
+
+# === Backup and temp files ===
+*.bak
+*.backup
+*.tmp
+*.log
+~$*
+
+# === Python (if you ever add scripts) ===
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.env
+
+# === Node (if you ever add tooling) ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+package-lock.json
+
+# === Common secret-bearing files ===
+# Never commit these by accident.
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets.json
+credentials.json
