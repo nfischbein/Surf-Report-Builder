@@ -348,6 +348,19 @@
             </details>
 
             <details>
+              <summary>What does Speculative confidence mean?</summary>
+              <p>
+                Every report includes a confidence rating &mdash; High, Medium, Low, or Speculative. Speculative is the floor. It means the system didn't get fresh data from one or more of the buoys, tide stations, or wind sources it tried, so the report is reasoning from older readings or general patterns rather than current conditions.
+              </p>
+              <p>
+                Most of the time, you'll see Speculative because the AI's web fetcher returned cached results that are hours or days old instead of the real, live data. When that happens, we think you should know.
+              </p>
+              <p>
+                If you see Speculative, two things usually help: open a fresh chat and try again (the AI's cache may release on a new session), or switch runtimes (ChatGPT Plus and Claude Pro/Max each have separate caching layers; one may be fresh when the other isn't). AI tooling is improving fast &mdash; the kinds of cache and fetch issues that produce Speculative reports today should get less common as runtimes mature.
+              </p>
+            </details>
+
+            <details>
               <summary>What does the Tracking prompt actually do?</summary>
               <p>
                 After you surf, you log a quick score: how close reality felt to what the report predicted, on a scale of -2 to +2. Over time those scores build a personal track record. The system uses that history to learn your break and tune future reports. It's a longer-term feature; the value compounds with every session you log.
