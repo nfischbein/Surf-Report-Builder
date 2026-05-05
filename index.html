@@ -286,13 +286,19 @@
                 You'll need an AI with live web access. Stick with paid tiers &mdash; free tiers tend to either make up data, fail partway through, or serve up day-old readings, none of which produces a useful report.
               </p>
               <p>
-                The paid tiers we've had success with: <strong>ChatGPT Plus</strong> and <strong>Claude Pro</strong>. ChatGPT Plus is the most thoroughly tested as of right now and a reasonable default if you don't have a preference.
+                The paid AIs we recommend, in order:
               </p>
               <p>
-                For ChatGPT Plus users specifically: Thinking mode works.<strong>Do not use Instant mode.</strong> It skips steps and produces abbreviated report prompts. 
+                <strong>Claude Pro</strong> &mdash; currently the most reliable. Handles the live data fetches cleanly and produces the most consistent reports.
               </p>
               <p>
-                AI tools change fast, so this guidance will evolve. If you try a different runtime and it works (or doesn't), the feedback form below is the right place to share that.
+                <strong>ChatGPT Plus (Thinking mode only)</strong> &mdash; works, with two caveats. First, use Thinking mode, not Instant &mdash; Instant skips steps and produces abbreviated prompts. Second, paste the prompt rather than uploading it as a file. We've seen ChatGPT occasionally serve old cached data to file uploads that doesn't reproduce when the same prompt is pasted directly.
+              </p>
+              <p>
+                <strong>Perplexity</strong> &mdash; not currently recommended. Tends to serve cached results too old to be useful for live conditions.
+              </p>
+              <p>
+                AI tools change fast, so this guidance will evolve. If you try a different one and it works (or doesn't), the feedback form below is the right place to share that.
               </p>
             </details>
 
@@ -347,15 +353,13 @@
             <details>
               <summary>What does Speculative confidence mean?</summary>
               <p>
-                Every report includes a confidence rating &mdash; High, Medium, Low, or Speculative. Speculative is the floor. It means the system didn't get fresh data from one or more of the buoys, tide stations, or wind sources it tried, so that report is reasoning from older readings or general patterns rather than current conditions.
+                Every report includes a confidence rating &mdash; High, Medium, Low, or Speculative. Speculative is the floor. It means the system couldn't confirm the core picture for your session window &mdash; the buoys, tide, or wind data either weren't reachable or were too old to trust as live conditions.
               </p>
               <p>
-                Most of the time, you'll see Speculative when the AI's web fetcher doesn't return live data, but  old, cached results instead. When that happens, we think you should know.
+                Most of the time, you'll see Speculative when the AI returns old cached data instead of live readings. When that happens, we think you should know rather than have the system pretend the data was fresh.
               </p>
               <p>
-                If you see Speculative, you might consider running the prompt again in a fresh chat session. Sometimes the AI cache may release on a new session.
-
-                AI tooling is improving fast &mdash; the kinds of cache and fetch issues that produce Speculative reports today should get less common as these systems mature.
+                If you see Speculative, the simplest fix is to run the prompt again in a fresh chat session &mdash; sometimes the AI's cache releases on a new session. AI tools are improving fast, and the cache and fetch issues that produce Speculative reports today should get less common as these systems mature.
               </p>
             </details>
 
@@ -372,7 +376,10 @@
             <details>
               <summary>Is my data going anywhere?</summary>
               <p>
-                The Builder itself doesn't send anything anywhere. The optional Tracking prompt stores your scores in a Google Sheet that you create and own. Nothing is sent to us. Nothing is shared with other users.
+                The Builder doesn't send anything to us. From time to time, after a report runs, the system sends a small anonymous health check &mdash; what kind of report you ran, which AI you used, and whether it worked &mdash; so we can fix things that break across users. No name, no email, no IP, no personal details.
+              </p>
+              <p>
+                The optional Tracking prompt stores your scores in a Google Sheet that you create and own. Nothing is sent to us. Nothing is shared with other users.
               </p>
             </details>
             <details>
